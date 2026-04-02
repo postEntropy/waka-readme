@@ -18,7 +18,7 @@ from src import config as C
 GRAPHQL_URL = "https://api.github.com/graphql"
 
 _REPO_LIST_QUERY = """
-query ($login: String!, $after: String) {
+query ($login: String!, $id: ID!, $after: String) {
   user(login: $login) {
     repositories(
       first: 100
@@ -80,7 +80,10 @@ async def _graphql(query: str, variables: dict[str, Any], token: str) -> dict:
             headers=headers,
         )
         resp.raise_for_status()
-        return resp.json()
+        data = resp.json()
+        if "errors" in data:
+            print(f"[GraphQL] Error: {data['errors']}")
+        return data
 
 
 # ── Public API ─────────────────────────────────────────────────────────────────
