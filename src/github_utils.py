@@ -51,12 +51,12 @@ query ($login: String!, $id: ID!, $after: String) {
 """
 
 _COMMIT_HISTORY_QUERY = """
-query ($owner: String!, $repo: String!, $after: String) {
+query ($owner: String!, $repo: String!, $authorId: ID!, $after: String) {
   repository(owner: $owner, name: $repo) {
     defaultBranchRef {
       target {
         ... on Commit {
-          history(first: 100, after: $after) {
+          history(first: 100, author: { id: $authorId }, after: $after) {
             pageInfo { hasNextPage endCursor }
             nodes {
               committedDate
@@ -117,21 +117,21 @@ async def fetch_user_repos(login: str, user_node_id: str) -> list[dict]:
             break
         after = page_info["endCursor"]
 
-    # Filter ignored repos
-    repos = [r for r in repos if r["name"] not in C.IGNORED_REPOS]
+    # Filter ignored repos and forks
+    repos = [r for r in repos if r["name"] not in C.IGNORED_REPOS and not r.get("isFork", False)]
     if C.MAX_REPOS > 0:
         repos = repos[: C.MAX_REPOS]
     return repos
 
 
-async def fetch_commit_history(owner: str, repo_name: str) -> list[dict]:
-    """Returns all commits in the default branch for a given repo."""
+async def fetch_commit_history(owner: str, repo_name: str, author_id: str) -> list[dict]:
+    """Returns all commits in the default branch for a given repo authored by the user."""
     commits: list[dict] = []
     after: str | None = None
     while True:
         result = await _graphql(
             _COMMIT_HISTORY_QUERY,
-            {"owner": owner, "repo": repo_name, "after": after},
+            {"owner": owner, "repo": repo_name, "authorId": author_id, "after": after},
             C.GH_TOKEN,
         )
         data = result.get("data") or {}
