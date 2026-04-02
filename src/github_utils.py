@@ -51,8 +51,8 @@ query ($login: String!, $id: ID!, $after: String) {
 """
 
 _COMMIT_HISTORY_QUERY = """
-query ($login: String!, $repo: String!, $after: String) {
-  repository(owner: $login, name: $repo) {
+query ($owner: String!, $repo: String!, $after: String) {
+  repository(owner: $owner, name: $repo) {
     defaultBranchRef {
       target {
         ... on Commit {
@@ -103,8 +103,13 @@ async def fetch_user_repos(login: str, user_node_id: str) -> list[dict]:
             {"login": login, "id": user_node_id, "after": after},
             C.GH_TOKEN,
         )
-        nodes = result["data"]["user"]["repositories"]["nodes"]
-        page_info = result["data"]["user"]["repositories"]["pageInfo"]
+        data = result.get("data") or {}
+        user_data = data.get("user") or {}
+        repos_data = user_data.get("repositories") or {}
+        
+        nodes = repos_data.get("nodes") or []
+        page_info = repos_data.get("pageInfo") or {"hasNextPage": False}
+        
         repos.extend(nodes)
         if C.MAX_REPOS > 0 and len(repos) >= C.MAX_REPOS:
             break
@@ -119,17 +124,19 @@ async def fetch_user_repos(login: str, user_node_id: str) -> list[dict]:
     return repos
 
 
-async def fetch_commit_history(login: str, repo_name: str) -> list[dict]:
+async def fetch_commit_history(owner: str, repo_name: str) -> list[dict]:
     """Returns all commits in the default branch for a given repo."""
     commits: list[dict] = []
     after: str | None = None
     while True:
         result = await _graphql(
             _COMMIT_HISTORY_QUERY,
-            {"login": login, "repo": repo_name, "after": after},
+            {"owner": owner, "repo": repo_name, "after": after},
             C.GH_TOKEN,
         )
-        ref = result.get("data", {}).get("repository", {}).get("defaultBranchRef")
+        data = result.get("data") or {}
+        repo_data = data.get("repository") or {}
+        ref = repo_data.get("defaultBranchRef")
         if not ref:
             break
         history = ref["target"]["history"]

@@ -73,7 +73,8 @@ async def build_stats(gh, login: str, user_node_id: str) -> str:
 
         async def fetch_safe(repo: dict) -> None:
             async with sem:
-                commits = await fetch_commit_history(login, repo["name"])
+                owner, name = repo["nameWithOwner"].split("/")
+                commits = await fetch_commit_history(owner, name)
                 all_commits.extend(commits)
 
         await asyncio.gather(*[fetch_safe(r) for r in repos])
