@@ -199,7 +199,5 @@ def update_readme(repo: Repository, stats: str, section: str = "waka") -> None:
         content=new_content,
         sha=readme_file.sha,  # type: ignore[union-attr]
         branch=push_branch,
-        committer=None,
-        author=None,
     )
     print(f"[GitHub] README.md updated on branch '{push_branch}'.")
