@@ -1,0 +1,8 @@
+PyGithub==2.5.0
+httpx~=0.27
+humanize~=4.10
+pytz~=2024.1
+matplotlib~=3.9
+numpy~=2.0
+PyYAML~=6.0
+python-dateutil~=2.9

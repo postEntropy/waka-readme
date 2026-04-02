@@ -1,0 +1,32 @@
+name: Update README Stats
+
+on:
+  schedule:
+    # Roda todo dia às 00:30 UTC (21:30 BRT)
+    - cron: '30 0 * * *'
+  workflow_dispatch:  # permite rodar manualmente pelo GitHub
+
+jobs:
+  update-readme:
+    name: Update README with Dev Metrics
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: WakaTime Readme Stats
+        uses: SEU_USUARIO/waka-readme@main   # <-- troque pelo seu usuario/repo
+        with:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          # Personalize conforme quiser:
+          SHOW_COMMIT: 'true'
+          SHOW_DAYS_OF_WEEK: 'true'
+          SHOW_LANGUAGE: 'true'
+          SHOW_EDITORS: 'true'
+          SHOW_PROJECTS: 'true'
+          SHOW_OS: 'true'
+          SHOW_TOTAL_CODE_TIME: 'true'
+          COMMIT_MESSAGE: 'chore: update README metrics'

@@ -1,0 +1,161 @@
+name: 'WakaTime Readme Stats'
+author: 'seu-usuario'
+description: 'Atualiza automaticamente seu perfil README com stats do WakaTime e GitHub'
+
+inputs:
+  GH_TOKEN:
+    description: 'GitHub access token (repo + user scope)'
+    required: true
+    default: ${{ github.token }}
+
+  WAKATIME_API_KEY:
+    description: 'Sua WakaTime API Key'
+    required: true
+
+  WAKATIME_API_URL:
+    description: 'URL base da API do WakaTime (mude apenas se usar self-hosted WakaTime)'
+    required: false
+    default: 'https://wakatime.com/api/v1/'
+
+  SECTION_NAME:
+    description: 'Nome da seção no README (entre os comentários <!--START_SECTION:X-->)'
+    required: false
+    default: 'waka'
+
+  PULL_BRANCH_NAME:
+    description: 'Branch de onde lê o README (padrão: branch default do repo)'
+    required: false
+    default: ''
+
+  PUSH_BRANCH_NAME:
+    description: 'Branch onde faz o commit do README atualizado'
+    required: false
+    default: ''
+
+  SHOW_COMMIT:
+    required: false
+    description: 'Mostra distribuição de commits por hora do dia'
+    default: 'true'
+
+  SHOW_DAYS_OF_WEEK:
+    required: false
+    description: 'Mostra distribuição de commits por dia da semana'
+    default: 'true'
+
+  SHOW_LANGUAGE:
+    required: false
+    description: 'Mostra linguagens mais usadas (WakaTime)'
+    default: 'true'
+
+  SHOW_EDITORS:
+    required: false
+    description: 'Mostra editores usados (WakaTime)'
+    default: 'true'
+
+  SHOW_PROJECTS:
+    required: false
+    description: 'Mostra projetos trabalhados (WakaTime)'
+    default: 'true'
+
+  SHOW_OS:
+    required: false
+    description: 'Mostra sistemas operacionais (WakaTime)'
+    default: 'true'
+
+  SHOW_TIMEZONE:
+    required: false
+    description: 'Mostra timezone'
+    default: 'true'
+
+  SHOW_LINES_OF_CODE:
+    required: false
+    description: 'Mostra badge com total de linhas de código'
+    default: 'false'
+
+  SHOW_LOC_CHART:
+    required: false
+    description: 'Gera e mostra gráfico de linhas de código por ano'
+    default: 'true'
+
+  SHOW_LANGUAGE_PER_REPO:
+    required: false
+    description: 'Mostra linguagem mais usada por repositório'
+    default: 'true'
+
+  SHOW_PROFILE_VIEWS:
+    required: false
+    description: 'Mostra badge de visualizações do perfil'
+    default: 'true'
+
+  SHOW_SHORT_INFO:
+    required: false
+    description: 'Mostra resumo do perfil GitHub'
+    default: 'true'
+
+  SHOW_UPDATED_DATE:
+    required: false
+    description: 'Mostra data de última atualização'
+    default: 'true'
+
+  SHOW_TOTAL_CODE_TIME:
+    required: false
+    description: 'Mostra badge de tempo total de código (WakaTime)'
+    default: 'true'
+
+  COMMIT_MESSAGE:
+    required: false
+    description: 'Mensagem do commit'
+    default: 'chore: update README with dev metrics'
+
+  COMMIT_BY_ME:
+    required: false
+    description: 'Commitar usando seu nome/email'
+    default: 'false'
+
+  COMMIT_USERNAME:
+    required: false
+    description: 'Username customizado para o commit'
+    default: 'readme-bot'
+
+  COMMIT_EMAIL:
+    required: false
+    description: 'Email customizado para o commit'
+    default: '41898282+github-actions[bot]@users.noreply.github.com'
+
+  MAX_REPOS:
+    required: false
+    description: 'Máximo de repositórios a buscar (0 = ilimitado)'
+    default: '0'
+
+  IGNORED_REPOS:
+    required: false
+    description: 'Repos a ignorar (separados por vírgula)'
+    default: ''
+
+  SYMBOL_VERSION:
+    required: false
+    description: 'Estilo da barra de progresso (1=█░, 2=⣿⣀, 3=⬛⬜)'
+    default: '1'
+
+  BADGE_STYLE:
+    required: false
+    description: 'Estilo dos badges (flat, flat-square, plastic, for-the-badge, social)'
+    default: 'flat'
+
+  UPDATED_DATE_FORMAT:
+    required: false
+    description: 'Formato da data de atualização'
+    default: '%d/%m/%Y %H:%M:%S'
+
+  DEBUG_RUN:
+    required: false
+    description: 'Modo debug: imprime as stats sem fazer commit'
+    default: 'false'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+
+branding:
+  icon: 'activity'
+  color: 'orange'
