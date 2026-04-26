@@ -57,7 +57,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: SEU_USUARIO/waka-readme@main
+      - uses: postEntropy/waka-readme@main
         with:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
@@ -72,7 +72,7 @@ Vá em **Actions → Update README Stats → Run workflow** para testar.
 ## Flags disponíveis
 
 ```yaml
-- uses: SEU_USUARIO/waka-readme@main
+- uses: postEntropy/waka-readme@main
   with:
     GH_TOKEN: ${{ secrets.GH_TOKEN }}
     WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
