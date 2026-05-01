@@ -17,9 +17,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: WakaTime Readme Stats
+        if: ${{ env.WAKATIME_API_KEY != '' }}
         uses: postEntropy/waka-readme@main   # <-- troque pelo seu usuario/repo
+        env:
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
         with:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           # Personalize conforme quiser:
           SHOW_COMMIT: 'true'
