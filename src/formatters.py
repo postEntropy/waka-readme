@@ -22,6 +22,8 @@ def _make_list(items: list[dict], key_name: str = "name", value_label: str = "te
     for item in items[:10]:
         name = item.get(key_name, "")
         pct = item.get("percent", 0.0)
+        if pct < 0.5:
+            continue
         label = item.get(value_label, "")
         bar = _bar(pct)
         lines.append(f"{name:<30} {label:<20} {bar}  {pct:.1f}%")
