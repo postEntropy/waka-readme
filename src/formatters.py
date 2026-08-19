@@ -116,6 +116,8 @@ def format_language_per_repo(repos: list[dict]) -> str:
     lines = ["**I Mostly Code in**\n\n```text"]
     for lang, size in lang_bytes.most_common(10):
         pct = size / total * 100
+        if pct < 1.0:
+            continue
         bar = _bar(pct)
         lines.append(f"{lang:<30} {bar}  {pct:.1f}%")
     lines.append("```")
